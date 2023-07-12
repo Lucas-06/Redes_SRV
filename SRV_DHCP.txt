@@ -1,0 +1,80 @@
+﻿####DHCP-SERVER####
+Mudar o nome do server
+	#hostnamectl set-hostname DHCPSERVER
+Atualizar o nome 
+	#bash
+Verificar interfaces
+	#ip a
+Mudar configurações de rede
+	#nano /etc/network/interfaces
+		#ADAPTADOR 1 DO VIRTUAL BOX -NAT
+		auto enp0s17
+		iface enp0s17 inet dhcp
+	
+		#ADAPTADOR DO VIRTUAL BOX - REDE INTERNA
+		auto enp0s8
+		iface enp0s8 inet static
+		address 172.31.0.254
+		netmask 255.255.255.0
+Reiniciar o serviço de rede
+	#systemctl restart networking.service
+Ping
+	#ping 8.8.8.8
+Atualizar repositorio
+	#apt update -y
+Instalar VIM
+	#apt install vim
+Ativar linhas numeradas
+	# vim /etc/vim/vimrc
+Instalar DHCP
+	#apt install isc-dhcp-server
+Local onde declaramos quais interfaces de rede participarão do processo do dhcp	
+	vim /etc/default/isc-dhcp-server
+		INTERFACESv4="enp0s8"
+Declaração do Serviço DHCP		
+	vim /etc/dhcp/dhcpd.conf
+		Linha 7 - Informar dominio
+			"pedro.local";
+		Linha 8 - Inforamr IP DNS
+			8.8.8.8;
+		Linha 35,36,37 e 38 - Descomentar
+			Linha 35 - Declarar subnet e máscara
+				172.31.0.0 netmask 255.255.255.0
+			Linha 36 - Range/escopo
+				172.31.0.10 172.31.0.20;
+			Linha 37 - Gateway
+				172.31.0.254
+Reiniciar serviço
+	#systemctl restart isc-dhcp-server.service
+Ver a pasta leases
+	#cat /var/lib/dhcp/dhcpd.leases
+Alterar outras configurações no linux	
+	vim /etc/dhcp/dhcpd.conf
+ 		Linha 78 a 81 - Descomentar	
+			Linha 78	
+				host CLIXP
+			Linha 79 
+				08:00:27:66:34:f1;
+			Linha 80
+				172.31.0.100;
+Reiniciar o serviço
+	#systemctl restart isc-dhcp-server.service
+	
+####CENARIO-DHCP####
+
+Liberar Ips
+	ipconfig /release
+Renovar Ips		
+	ipconfig /renew
+
+
+
+
+
+
+
+
+
+
+
+
